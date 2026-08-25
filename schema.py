@@ -10,3 +10,5 @@ class SchemaConfig:
     max_duration_s: float = 7200.0
     allowed_tasks: Tuple[str, ...] = ("still", "unspecified")
     enforce_allowed_tasks: bool = True
+
+    

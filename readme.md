@@ -1,4 +1,4 @@
-# Guia Didático Completo — depressao_eeg_v24
+# Guia Didático Completo — depressao_eeg_v24 / main
 
 ### Como funciona, do início ao fim, um estudo auditável de EEG frontal de três canais aplicado ao conjunto MODMA de depressão maior
 
@@ -308,13 +308,13 @@ pip install -r requirements.txt
 ```
 Passo 1 — Sempre comece pelos autotestes. Se algo estiver errado no ambiente, você descobre aqui e não no meio da análise.
 ```
-python depressao_eeg_v24.py --selftest
+python main.py --selftest
 ```
 >  resultado esperado: RESULTADO: 52/52
 
 Passo 2 — Execução em modo integração. Obrigatória, e não consome nada: nenhuma inferência é feita.
 ```bash
-python depressao_eeg_v24.py \
+python main.py \
   --eeg-dir  ./modma_eeg_3ch \
   --metadata ./meta.xlsx \
   --output   ./saida_integracao \
@@ -337,7 +337,7 @@ cfg = RunConfig(
 Passo 4 — Execução em modo pesquisa, que agora está liberado.
 
 ```bash
-python depressao_eeg_v24.py --eeg-dir ./modma_eeg_3ch --metadata ./meta.xlsx \
+python main.py --eeg-dir ./data --metadata ./meta.xlsx \
   --output ./saida_pesquisa --selection-criterion "..." --mode research
   ````
 

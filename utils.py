@@ -8,8 +8,9 @@ from analysis import AnalysisConfig
 from schema import SchemaConfig
 from subject_recording import SubjectRecording
 from run_config import RunConfig
+from configuration import Configuration
 
-from vars import TASK_UNSPECIFIED, NAME_RE, PROFILE_BANDS, PRIMARY_FEATURES, CLINICAL_SCALE_TOKENS
+from vars import TASK_UNSPECIFIED, NAME_REGEX, PROFILE_BANDS, PRIMARY_FEATURES, CLINICAL_SCALE_TOKENS
 
 from typing import Tuple, Sequence, Dict, Any, Optional, List
 
@@ -36,7 +37,7 @@ def discover_eeg_files(eeg_dir: str | Path) -> Tuple[List[Path], List[Dict[str, 
     """Descobre TXT validos; nomes fora do padrao vao para quarentena (nao abortam)."""
     root = Path(eeg_dir)
     if not root.is_dir():
-        raise FileNotFoundError("Diretorio EEG inexistente: %s" % root)
+        raise FileNotFoundError("Diretorio com dados EEG inexistente: %s" % root)
     valid, quarantined = [], []
     for p in sorted(root.glob("*.txt")):
         try:
@@ -87,21 +88,11 @@ def load_modma_metadata(path: str | Path) -> pd.DataFrame:
 
 def parse_modma_filename(name: str) -> Tuple[str, str]:
     """Extrai (subject_id, task) do nome do arquivo; task ausente -> 'unspecified'."""
-    m = NAME_RE.match(name.strip())
+    m = NAME_REGEX.match(name.strip())
     if not m:
         raise ValueError("Nome fora do padrao MODMA: %r" % name)
     return m.group("sid"), (m.group("task") or TASK_UNSPECIFIED)
 
-def fix_integer_wraparound(arr: np.ndarray, container_bits: int) -> Tuple[np.ndarray, int]:
-    """Reinterpreta inteiros sem sinal como complemento de dois (v > 2**31 -> v - 2**32)."""
-    half, full = 2 ** (container_bits - 1), 2 ** container_bits
-    mask = arr > half
-    n = int(mask.sum())
-    if n == 0:
-        return arr, 0
-    out = arr.copy()
-    out[mask] = out[mask] - full
-    return out, n
 
 def jensen_shannon(p: np.ndarray, q: np.ndarray) -> float:
     """Divergencia de Jensen-Shannon (base 2) entre dois perfis espectrais em [0,1]."""
@@ -134,7 +125,7 @@ def bh_fdr(p: Sequence[float]) -> np.ndarray:
     return out
 
 
-def verify_sampling_rate(x: np.ndarray, acq: AcquisitionConfig) -> Dict[str, Any]:
+def verify_sampling_rate(x: np.ndarray, acq: AcquisitionConfig|Configuration) -> Dict[str, Any]:
     """B2: verificacao EMPIRICA da taxa de amostragem pelo pico de rede eletrica.
 
     ``fs`` nao e lida do arquivo: os TXT do MODMA sao matrizes de contas sem
@@ -355,42 +346,6 @@ def spectral_profile(seg: np.ndarray, fs: float) -> np.ndarray:
 def profile_matrix(df: pd.DataFrame) -> np.ndarray:
     return df[["prof_%s" % nm for nm, _, _ in PROFILE_BANDS]].to_numpy(float)
 
-def parse_sex_column(values: pd.Series) -> Tuple[pd.Series, Dict[str, Any]]:
-    """B9: parser de sexo robusto a codificacao numerica, com relatorio explicito.
-
-    ERRO CORRIGIDO. A v23 fazia ``str[0]`` e mapeava apenas 'M'/'F'. Se a planilha
-    codificasse sexo como 1/2 - convencao comum, inclusive no MODMA - o resultado
-    era NaN para TODOS os participantes. Em ``confound_adjusted_models`` o
-    ``dropna()`` esvaziava o dataframe, ``len(sub) < 20`` disparava e cada feature
-    era pulada SEM erro: os modelos ajustados por confundidores simplesmente nao
-    rodavam, e nada no relatorio deixava isso evidente.
-
-    Convencao de saida: 1.0 = masculino, 0.0 = feminino, NaN = nao mapeado.
-    A codificacao numerica assumida (1=M, 2=F) e declarada no relatorio para que
-    possa ser contestada; se estiver invertida, o sinal do coeficiente de sexo
-    inverte, sem afetar as demais covariaveis.
-    """
-    raw = pd.Series(values)
-    s = raw.astype(str).str.strip().str.upper()
-    out = pd.Series(np.nan, index=raw.index, dtype=float)
-    out[s.str.startswith("M") | s.isin({"MALE", "MASCULINO", "H"})] = 1.0
-    out[s.str.startswith("F") | s.isin({"FEMALE", "FEMININO", "W"})] = 0.0
-    num = pd.to_numeric(raw, errors="coerce")
-    coding = "text"
-    unresolved = out.isna() & num.notna()
-    if unresolved.any():
-        vals = set(np.unique(num[unresolved].to_numpy()))
-        if vals <= {1.0, 2.0}:
-            out[unresolved] = np.where(num[unresolved] == 1.0, 1.0, 0.0); coding = "numeric_1M_2F"
-        elif vals <= {0.0, 1.0}:
-            out[unresolved] = num[unresolved].astype(float); coding = "numeric_1M_0F"
-    report = {"n_total": int(len(raw)), "n_mapped": int(out.notna().sum()),
-              "n_unmapped": int(out.isna().sum()), "coding_detected": coding,
-              "distinct_input_values": sorted(map(str, pd.unique(raw.astype(str))))[:12]}
-    if report["n_mapped"] == 0:
-        warnings.warn("B9: nenhuma linha de sexo pode ser mapeada (valores: %s)."
-                      % report["distinct_input_values"], RuntimeWarning)
-    return out, report
 
 def sign_agreement_with_ci(g_ref: pd.Series, g_alt: pd.Series, n_boot: int = 2000,
                            seed: int = 0) -> Dict[str, Any]:
@@ -1084,4 +1039,66 @@ def sha256_file(path: Path, chunk: int = 1 << 20) -> str:
         for b in iter(lambda: f.read(chunk), b""):
             h.update(b)
     return h.hexdigest()
+
+
+
+""" ==========================================
+==============OBRIGATÓRIO MANTER==============
+==============================================
+"""
+def fix_integer_wraparound(arr: np.ndarray, container_bits: int) -> Tuple[np.ndarray, int]:
+    """Reinterpreta inteiros sem sinal como complemento de dois (v > 2**31 -> v - 2**32)."""
+    half, full = 2 ** (container_bits - 1), 2 ** container_bits
+    mask = arr > half
+    n = int(mask.sum())
+    if n == 0:
+        return arr, 0
+    out = arr.copy()
+    out[mask] = out[mask] - full
+    return out, n
+
+def parse_sex_column(values: pd.Series) -> Tuple[pd.Series, Dict[str, Any]]:
+    """B9: parser de sexo robusto a codificacao numerica, com relatorio explicito.
+
+    ERRO CORRIGIDO. A v23 fazia ``str[0]`` e mapeava apenas 'M'/'F'. Se a planilha
+    codificasse sexo como 1/2 - convencao comum, inclusive no MODMA - o resultado
+    era NaN para TODOS os participantes. Em ``confound_adjusted_models`` o
+    ``dropna()`` esvaziava o dataframe, ``len(sub) < 20`` disparava e cada feature
+    era pulada SEM erro: os modelos ajustados por confundidores simplesmente nao
+    rodavam, e nada no relatorio deixava isso evidente.
+
+    Convencao de saida: 1.0 = masculino, 0.0 = feminino, NaN = nao mapeado.
+    A codificacao numerica assumida (1=M, 2=F) e declarada no relatorio para que
+    possa ser contestada; se estiver invertida, o sinal do coeficiente de sexo
+    inverte, sem afetar as demais covariaveis.
+    """
+    raw = pd.Series(values)
+    s = raw.astype(str).str.strip().str.upper()
+    out = pd.Series(np.nan, index=raw.index, dtype=float)
+    out[s.str.startswith("M") | s.isin({"MALE", "MASCULINO", "H"})] = 1.0
+    out[s.str.startswith("F") | s.isin({"FEMALE", "FEMININO", "W"})] = 0.0
+    num = pd.to_numeric(raw, errors="coerce")
+    coding = "text"
+    unresolved = out.isna() & num.notna()
+    if unresolved.any():
+        vals = set(np.unique(num[unresolved].to_numpy()))
+        if vals <= {1.0, 2.0}:
+            out[unresolved] = np.where(num[unresolved] == 1.0, 1.0, 0.0); coding = "numeric_1M_2F"
+        elif vals <= {0.0, 1.0}:
+            out[unresolved] = num[unresolved].astype(float); coding = "numeric_1M_0F"
+    report = {"n_total": int(len(raw)), "n_mapped": int(out.notna().sum()),
+              "n_unmapped": int(out.isna().sum()), "coding_detected": coding,
+              "distinct_input_values": sorted(map(str, pd.unique(raw.astype(str))))[:12]}
+    if report["n_mapped"] == 0:
+        warnings.warn("B9: nenhuma linha de sexo pode ser mapeada (valores: %s)."
+                      % report["distinct_input_values"], RuntimeWarning)
+    return out, report
+
+
+def normalize_subject_id(values) -> pd.Series:
+    """Normaliza identificadores para 8 digitos com zeros a esquerda."""
+    s = pd.Series(values).astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
+    return s.str.zfill(8)
+
+
 

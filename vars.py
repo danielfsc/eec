@@ -75,12 +75,10 @@ PRIMARY_FEATURES = ("rel_delta", "rel_theta", "rel_alpha", "rel_beta", "spec_ent
 
 CLINICAL_SCALE_TOKENS = ("phq", "gad", "psqi", "ctq", "les", "ssrs")
 
-# ==================================================================================
-# BLOCO 2/11 - LEITURA, ESQUEMA E METADADOS
-# ==================================================================================
+# ===========================
 import re
 
-NAME_RE = re.compile(r"^(?P<sid>\d{8})(?:_(?P<task>[A-Za-z]+))?\.txt$")
+NAME_REGEX = re.compile(r"^(?P<sid>\d{8})(?:_(?P<task>[A-Za-z]+))?\.txt$")
 
 TASK_UNSPECIFIED = "unspecified"
 
