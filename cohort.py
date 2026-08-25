@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import Optional, Tuple
+from vars import EXPECTED_SUBJECT_IDS_55
 
 @dataclass(frozen=True)
 class CohortConfig:

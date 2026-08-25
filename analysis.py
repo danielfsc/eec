@@ -1,4 +1,5 @@
-
+from dataclasses import dataclass
+from typing import Tuple, Optional
 @dataclass(frozen=True)
 class AnalysisConfig:
     """Plano analitico congelado ANTES de ver resultados."""

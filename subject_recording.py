@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import Dict, Any
+import numpy as np
 
 @dataclass(frozen=True)
 class SubjectRecording:

@@ -1,4 +1,5 @@
-
+from dataclasses import dataclass
+from typing import Optional, Tuple
 @dataclass(frozen=True)
 class PreprocConfig:
     """Pre-processamento no sinal CONTINUO, antes de epocar."""

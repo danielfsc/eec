@@ -1,4 +1,4 @@
-
+from typing import Dict, Tuple
 __version__ = "24.0.0"
 
 CHANGELOG_V24 = (
@@ -80,6 +80,9 @@ CLINICAL_SCALE_TOKENS = ("phq", "gad", "psqi", "ctq", "les", "ssrs")
 # ==================================================================================
 import re
 
-_NAME_RE = re.compile(r"^(?P<sid>\d{8})(?:_(?P<task>[A-Za-z]+))?\.txt$")
+NAME_RE = re.compile(r"^(?P<sid>\d{8})(?:_(?P<task>[A-Za-z]+))?\.txt$")
 
 TASK_UNSPECIFIED = "unspecified"
+
+PROFILE_BANDS = (("delta", 1.0, 4.0), ("theta", 4.0, 8.0), ("alpha", 8.0, 13.0),
+                  ("beta", 13.0, 30.0), ("gamma_low", 30.0, 40.0))

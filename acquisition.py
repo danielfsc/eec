@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from typing import Optional, Tuple
 
 @dataclass(frozen=True)
 class AcquisitionConfig:
@@ -11,7 +13,8 @@ class AcquisitionConfig:
                       "24 bits a 250 Hz; lote unico verificado por esquema.")
     protocol_id: str = "MODMA_3ch_pervasive_resting"
     channel_names: Tuple[str, ...] = ("Fp1", "Fpz", "Fp2")
-    channel_order_source: str = "Ordem posicional das colunas do TXT (documentacao do dispositivo)."
+    channel_order_source: str = "Ordem posicio" \
+    "nal das colunas do TXT (documentacao do dispositivo)."
     container_bits: int = 32
     adc_bits: int = 24
     lsb_to_uv: Optional[float] = None

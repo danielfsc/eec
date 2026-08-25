@@ -1122,7 +1122,7 @@ def cohort_qc_decision(qc_df: pd.DataFrame, qc: QCConfig) -> pd.DataFrame:
     """Decisao de exclusao PRE-ESPECIFICADA: limiares absolutos + outlier de coorte (MAD)."""
     out = qc_df.copy()
     reasons: List[List[str]] = [[] for _ in range(len(out))]
-
+    # print(out);
     def _abs_rule(col: str, thr: float, greater: bool, tag: str) -> None:
         if col not in out.columns:
             return
@@ -1132,6 +1132,7 @@ def cohort_qc_decision(qc_df: pd.DataFrame, qc: QCConfig) -> pd.DataFrame:
             reasons[i].append("%s=%.4g" % (tag, v[i]))
 
     _abs_rule("line_noise_ratio_post", qc.max_line_noise_ratio, True, "line_noise")
+    # print([2,out])
     _abs_rule("ocular_index", qc.max_ocular_index, True, "ocular")
     _abs_rule("muscle_ratio", qc.max_muscle_ratio, True, "muscle")
     _abs_rule("zero_diff_fraction", qc.max_zero_diff_fraction, True, "frozen_samples")
@@ -1738,6 +1739,7 @@ def run_v24(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | Pa
     filtered_map: Dict[str, np.ndarray] = {}
     qc_rows, block_rows, fs_rows = [], [], []
     for fp in files:
+        # print(['Arquivo', fp])
         try:
             rec = load_modma_txt(fp, cfg.acquisition, fp.name, cfg.schema)
             if rec.subject_id in recs:
@@ -1749,10 +1751,13 @@ def run_v24(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | Pa
             prof["subject_id"] = rec.subject_id
             recs[rec.subject_id] = rec
             filtered_map[rec.subject_id] = filt
+            # print(['Entrada da função',rec, filt, cfg.acquisition, cfg.features, fdiag])
+            # print(['resultado da subeject_qc_metrics',subject_qc_metrics(rec, filt, cfg.acquisition, cfg.features, fdiag)])
             qc_rows.append(subject_qc_metrics(rec, filt, cfg.acquisition, cfg.features, fdiag))
             block_rows.append(prof)
             fs_rows.append(fsv)
         except Exception as exc:
+            # print(['Erro em alguma função', exc])
             failures.append({"file": fp.name, "subject_id": fp.stem.split("_")[0],
                              "stage": "read_or_profile",
                              "error": "%s: %s" % (type(exc).__name__, str(exc)[:200])})
@@ -1760,27 +1765,32 @@ def run_v24(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | Pa
         raise RuntimeError("Nenhum registro utilizavel.")
 
     # B3: referencia espectral EXTERNA, mediana da coorte nos blocos terminais
+    # print(['Block_rows-antes do cohort', block_rows])
+    # print(['qc_rows-antes do cohort', qc_rows])
     cohort_ref = cohort_terminal_profile(block_rows, cfg.temporal)
     settle_rows = []
+    # print(['Block_rows-antes do for', block_rows])
+    # print(['qc_rows-antes do for', qc_rows])
     for prof in block_rows:
         sid = str(prof["subject_id"].iloc[0])
         st = subject_settling_time(prof, cfg.temporal, cohort_ref_profile=cohort_ref)
         st["subject_id"] = sid
         st["duration_s"] = recs[sid].parse_report["duration_s"]
         settle_rows.append(st)
-
+    # print(['qc_rows - depois do for',qc_rows])
     qc_df = cohort_qc_decision(pd.DataFrame(qc_rows), cfg.qc)
     qc_dist = qc_distribution_report(qc_df, cfg.qc)                      # B5
     settle_df = pd.DataFrame(settle_rows)
     blocks_df = pd.concat(block_rows, ignore_index=True)
     fs_df = pd.DataFrame(fs_rows)
+    print(['FS_DF',fs_df])
+    
 
     # --- Etapa 2 (A5/B3/B4): derivacao do protocolo temporal ---
     durations = {s: r.parse_report["duration_s"] for s, r in recs.items()}
     protocol = derive_temporal_protocol(settle_df, durations, cfg.temporal)
     windows = protocol["sensitivity_windows"]
     primary_start, primary_len = windows[0]
-
     # --- Etapa 3: features por janela ---
     feat_by_window: Dict[str, pd.DataFrame] = {}
     for (s0, L) in windows:
@@ -1798,12 +1808,13 @@ def run_v24(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | Pa
 
     key_primary = "w_%.0f_%.0f" % (primary_start, primary_len)
     features = feat_by_window[key_primary]
-
+    print(['features',features])
     # --- Etapa 4: pareamento e coorte analitica ---
     merged = features.merge(metadata, on="subject_id", how="left")
     unmatched = merged.loc[merged["label"].isna(), "subject_id"].tolist()
     merged = merged.loc[merged["label"].notna()].copy()
     merged["label"] = merged["label"].astype(int)
+    print(qc_df)
     qc_pass = set(qc_df.loc[qc_df["qc_pass"], "subject_id"])
     merged["qc_pass"] = merged["subject_id"].isin(qc_pass)
     drift_ok = ((pd.to_numeric(merged.get("drift_log2_rms"), errors="coerce")
@@ -1821,6 +1832,7 @@ def run_v24(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | Pa
     # B6: falhas segregadas por estagio; a v23 somava leitura e janela no mesmo total,
     # de modo que um sujeito podia ser contado ate 3 vezes como "arquivo que falhou".
     fail_df = pd.DataFrame(failures)
+    print(['fail_df',fail_df])
     if not fail_df.empty and "stage" in fail_df.columns:
         by_stage = fail_df.groupby("stage").size().to_dict()
         subj_by_stage = {k: int(v["subject_id"].nunique())

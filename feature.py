@@ -1,4 +1,5 @@
-
+from dataclasses import dataclass
+from typing import Tuple
 @dataclass(frozen=True)
 class FeatureConfig:
     """Parametros PRE-ESPECIFICADOS de extracao (a janela vem de TemporalProtocolConfig)."""

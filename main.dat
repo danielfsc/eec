@@ -1,0 +1,8 @@
+['FS_DF',    fs_assumed_hz  fs_is_assumption  ...  implied_fs_if_peak_is_line_hz  subject_id
+0          250.0              True  ...                             []    02010001
+1          250.0              True  ...                             []    02010002
+2          250.0              True  ...                             []    02020004
+3          250.0              True  ...                             []    02020007
+4          250.0              True  ...                             []    02020018
+
+[5 rows x 8 columns]]
