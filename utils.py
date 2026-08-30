@@ -151,6 +151,7 @@ def verify_sampling_rate(x: np.ndarray, acq: AcquisitionConfig|Configuration) ->
         return {"fs_assumed_hz": float(acq.fs), "fs_verification": "insufficient_band",
                 "fs_supported": False}
     fb, pb = f[band], np.log10(p[band] + 1e-30)
+    
     i = int(np.argmax(pb))
     peak_hz = float(fb[i])
     prominence = float(pb[i] - np.median(pb))
@@ -164,11 +165,11 @@ def verify_sampling_rate(x: np.ndarray, acq: AcquisitionConfig|Configuration) ->
     else:
         status, supported = "no_line_peak_detected_inconclusive", False
     implied = [float(acq.fs * c / peak_hz) for c in acq.fs_verification_line_hz] if has_peak else []
-    return {"fs_assumed_hz": float(acq.fs), "fs_is_assumption": bool(acq.fs_is_assumption),
+    return {"implied_fs_if_peak_is_line_hz": implied,"fs_assumed_hz": float(acq.fs), "fs_is_assumption": bool(acq.fs_is_assumption),
             "line_peak_hz_under_assumed_fs": peak_hz,
             "line_peak_prominence_log10": prominence,
-            "fs_verification": status, "fs_supported": bool(supported),
-            "implied_fs_if_peak_is_line_hz": implied}
+            "fs_verification": status, "fs_supported": bool(supported)
+            }
 
 
 def psd_continuous(x: np.ndarray, fs: float, nperseg_s: float = 4.0):
@@ -201,7 +202,7 @@ def preprocess_continuous(x_counts: np.ndarray, acq: AcquisitionConfig,
         if y.shape[1] <= 2 * k:
             raise ValueError("Sinal curto demais para o corte de borda.")
         y = y[:, k:-k]
-    y = np.ascontiguousarray(y - y.mean(axis=1, keepdims=True))
+    # y = np.ascontiguousarray(y - y.mean(axis=1, keepdims=True))
     diag = {"notch_mode": pre.notch_mode, "notch_applied": bool(do_notch),
             "line_ratio_pre": float(pre_ratio),
             "line_ratio_post": float(line_noise_ratio(y, acq.fs, pre.notch_hz or 50.0)),

@@ -67,19 +67,14 @@ def run_main(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | P
         raise RuntimeError("Nenhum registro utilizavel.")
 
     # B3: referencia espectral EXTERNA, mediana da coorte nos blocos terminais
-    # print(block_rows)
-    # print(['Block_rows-antes do cohort', block_rows])
-    # print(['qc_rows-antes do cohort', qc_rows])
     cohort_ref = ut.cohort_terminal_profile(block_rows, cfg.temporal)
     settle_rows = []
-    # print(['qc_rows-antes do for', qc_rows])
     for prof in block_rows:
         sid = str(prof["subject_id"].iloc[0])
         st = ut.subject_settling_time(prof, cfg.temporal, cohort_ref_profile=cohort_ref)
         st["subject_id"] = sid
         st["duration_s"] = recs[sid].parse_report["duration_s"]
         settle_rows.append(st)
-    # print(['qc_rows - depois do for',qc_rows])
     qc_df = qc.cohort_qc_decision(pd.DataFrame(qc_rows), cfg.qc)
     qc_dist = qc.qc_distribution_report(qc_df, cfg.qc)                      # B5
     settle_df = pd.DataFrame(settle_rows)

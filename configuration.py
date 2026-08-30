@@ -29,3 +29,35 @@ class Configuration:
     container_bits: int = 32
     adc_bits: int = 24
     lsb_to_uv: Optional[float] = None
+
+    """Pre-processamento no sinal CONTINUO, antes de epocar."""
+    notch_hz: Optional[float] = 50.0
+    notch_q: float = 30.0
+    notch_mode: str = "auto"
+    notch_line_ratio_threshold: float = 0.02
+    bandpass_hz: Tuple[float, float] = (1.0, 40.0)
+    filter_order: int = 4
+    edge_trim_seconds: float = 2.0
+    epoch_seconds: float = 4.0
+    epoch_overlap: float = 0.0
+
+    # TEMPORAL PROTOCOL
+    mode: str = "derived"                 # derived | fixed
+    block_seconds: float = 20.0
+    min_duration_seconds: float = 600.0
+    settle_tol_log2: float = 0.35
+    settle_tol_js: float = 0.15
+    settle_quantile: float = 0.80
+    min_skip_seconds: float = 30.0
+    max_skip_seconds: float = 420.0
+    target_window_seconds: float = 240.0
+    max_window_seconds: float = 480.0
+    n_sensitivity_windows: int = 3
+    require_sensitivity: bool = True
+    max_within_window_drift_log2: float = 1.50
+    max_within_window_js: float = 0.35
+    settling_ref_mode: str = "cohort"     # B3: cohort | self
+    n_terminal_blocks: int = 5
+    tail_trend_warn: float = 0.50
+    fixed_skip_seconds: float = 30.0
+    fixed_window_seconds: float = 240.0

@@ -4,7 +4,7 @@ from typing import Optional, Tuple
 @dataclass(frozen=True)
 class AcquisitionConfig:
     """Parametros de aquisicao do experimento pervasivo de 3 eletrodos."""
-    fs: float = 250.0
+    fs: float = 250.0 # SAMPLING_FREQUENCY
     fs_is_assumption: bool = True   # B2: revertido para suposicao declarada
     fs_verification_line_hz: Tuple[float, ...] = (50.0, 60.0)
     fs_verification_min_prominence_log10: float = 0.30

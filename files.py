@@ -20,7 +20,7 @@ def list_data_eeg_files(data_dir: str | Path) -> Tuple[List[Path], List[Dict[str
     """
     root = Path(data_dir)
     if not root.is_dir():
-        raise FileNotFoundError("Diretorio com dados EEG inexistente: %s" % root)
+        raise FileNotFoundError("Diretório com dados EEG inexistente: %s" % root)
     valid_name, invalid_name = [], []
     for p in sorted(root.glob("*.txt")):
         try:
@@ -37,12 +37,12 @@ def get_modma_sid_task(name: str) -> Tuple[str, str]:
     """
     m = NAME_REGEX.match(name.strip())
     if not m:
-        raise ValueError("Nome fora do padrao MODMA: %r" % name)
+        raise ValueError("Nome fora do padrão MODMA: %r" % name)
     return m.group("sid"), (m.group("task") or TASK_UNSPECIFIED)
 
 
 def load_modma_metadata(path: str | Path) -> pd.DataFrame:
-    """Le a planilha, canoniza IDs, mapeia MDD/HC e extrai covariaveis demograficas e retorna um dataframe do pandas
+    """Le a planilha, canoniza IDs, mapeia MDD/HC e extrai covariáveis demográficas e retorna um dataframe do pandas
     INPUT:
     path: str|Path - para o arquivo de metadados. O arquivo tem que estar em XLS, XLSX ou CSV
     OUTPUT: Pandas.Dataframe
@@ -66,7 +66,7 @@ def load_modma_metadata(path: str | Path) -> pd.DataFrame:
     lab = out["label_raw"].astype(str).str.upper().str.strip()
     out["label"] = np.where(lab.str.startswith("MDD"), 1, np.where(lab.str.startswith("HC"), 0, -1))
     if (out["label"] < 0).any():
-        raise ValueError("Rotulo nao mapeavel para MDD/HC.")
+        raise ValueError("Rotulo nao mapeável para MDD/HC.")
     for c in list(out.columns):
         if c.startswith("education"):
             out = out.rename(columns={c: "education_years"})
