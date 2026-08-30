@@ -1,6 +1,7 @@
 from scipy.signal import butter,filtfilt, iirnotch
 import numpy as np
 
+from typing import Tuple
 from configuration_new import Configuration
 
 default = Configuration()
@@ -55,3 +56,37 @@ def cut_array_edges(data:np.ndarray, size:int = 1):
     if(data.shape[1] <= 2*size ):
         raise ValueError("Sinal curto demais para o corte de borda.")
     return data[:, size:-size]
+
+
+
+def fix_integer_wraparound(data: np.ndarray, bits_resolution: int = default.bits_resolution) -> Tuple[np.ndarray, int]:
+    """
+    Reinterpreta inteiros sem sinal como complemento de dois (v > 2**31 -> v - 2**32).
+    """
+    zero = 2 ** (bits_resolution - 1) 
+    full = zero * 2
+    mask = data > zero
+    n = int(mask.sum())
+    if n == 0:
+        return data, 0
+    data[mask] = data[mask] - full
+    return data, n
+
+
+def is_data_shape_ok(data:np.ndarray, cfg:Configuration=default):
+    dur = data.shape[1] / cfg.sampling_frequency
+    if dur > cfg.max_data_duration:
+        raise ValueError("\n\tDado com duracao %.2f s acima do maximo.\n\t Verifique a variável \"max_data_duration\"" % ( dur))
+    if data.shape[0] != cfg.number_electrodes:
+        raise ValueError("\n\t Dado com número de eletrodos %d diferente do esperado.\n\t Verifique no arquivo de configuração a variável \"number_electrodes\"" % (data.shape[0]))
+    return True
+
+
+
+
+
+
+
+
+
+

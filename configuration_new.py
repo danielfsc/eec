@@ -3,12 +3,21 @@ from typing import  Tuple, Optional
 import numpy as np
 @dataclass(frozen=True)
 class Configuration:
+
+    ## Acquisition Parameters
     
     sampling_frequency = 250 #Frequência da coleta de dados em Hz
 
     exclusion_time_window = 2.0
 
-    # FILTERS PARAMETERS
+    bits_resolution = 24
+
+    max_data_duration = 7200 # Duração do experimento em segundos
+
+    number_electrodes = 3
+
+    # #FILTERS PARAMETERS
+
     low_filter_frequency = 40.
     high_filter_frequency=1.
     band_limits = [high_filter_frequency,low_filter_frequency]
