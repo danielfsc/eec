@@ -5,9 +5,9 @@ import numpy as np
 import warnings
 
 from vars import NAME_REGEX, TASK_UNSPECIFIED
-from configuration import Configuration
-from subject_recording import SubjectRecording
-import utils as ut
+from old_stuff.configuration import Configuration
+from old_stuff.subject_recording import SubjectRecording
+import old_stuff.utils as ut
 
 def list_data_eeg_files(data_dir: str | Path) -> Tuple[List[Path], List[Dict[str, str]]]:
     """Retorna os arquivos em um diretório:

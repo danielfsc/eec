@@ -2,8 +2,10 @@ from scipy.signal import butter,filtfilt, iirnotch
 import numpy as np
 
 from typing import Tuple
+
 from configuration_new import Configuration
 
+import utils2 as ut
 default = Configuration()
 
 # def pass_filter(data:np.ndarray, cutoff, sampling_frequency, filter_type, filter_order, analog=False):
@@ -25,7 +27,39 @@ default = Configuration()
 # def low_pass_filter(data:np.ndarray, cutoff:float,sampling_frequency:int):
 #     return pass_filter(data, cutoff , sampling_frequency, 'low', order)
 
+def apply_filter(
+        data:np.ndarray,
+        cfg: Configuration  = default
+        # sampling_frequency: float|int,
+        # exclusion_time_window:float|int
+    )->np.ndarray:
 
+    data = subtract_mean_value(data)
+
+    pre_ratio = line_noise_ratio(data, cfg.sampling_frequency, cfg.notch_remove_frequency or 50.0)
+
+    if cfg.notch_mode == "always":
+        do_notch = cfg.notch_remove_frequency is not None
+    elif cfg.notch_mode == "never":
+        do_notch = False
+    else:
+        do_notch = (cfg.notch_remove_frequency is not None) and (pre_ratio > cfg.notch_line_ratio_threshold)
+    if do_notch:
+        data = notch_filter(data)
+    data = band_pass_filter(data)
+    cut_size = int( round(cfg.sampling_frequency *cfg.exclusion_time_window))
+    data = cut_array_edges(data, cut_size)
+    return data , pos_filter_infos(data, do_notch, pre_ratio, cfg=cfg)
+
+def pos_filter_infos(data:np.ndarray, do_notch:bool, pre_ratio:float, cfg:Configuration = default):
+    return {
+        "notch_mode": cfg.notch_mode, 
+        "notch_applied": bool(do_notch),
+        "line_ratio_pre": float(pre_ratio),
+        "line_ratio_post": float(line_noise_ratio(data, cfg.sampling_frequency, cfg.notch_remove_frequency or 50.0)),
+        "edge_trim_s": float(cfg.exclusion_time_window),
+        "n_samples_after_trim": int(data.shape[1])
+    }
 def band_pass_filter(data:np.ndarray,
                     band=default.band_limits,
                     sampling_frequency:int=default.sampling_frequency,
@@ -83,6 +117,11 @@ def is_data_shape_ok(data:np.ndarray, cfg:Configuration=default):
 
 
 
+def line_noise_ratio(data: np.ndarray, sampling_frequency: float, notch_frequency: float = 50.0, bw: float = 1.0,
+                     ref: Tuple[float, float] = (1.0, 45.0)) -> float:
+    """Evidencia MEDIDA de interferencia de rede eletrica; base da decisao de notch."""
+    f, p = ut.welch_power_spectral_density(data, sampling_frequency)
+    return float(np.median(np.atleast_1d(ut.band_share(f, p, notch_frequency - bw, notch_frequency + bw, ref))))
 
 
 

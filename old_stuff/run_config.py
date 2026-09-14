@@ -1,16 +1,16 @@
 from dataclasses import dataclass, asdict, field
 import hashlib
 import json
-from schema import SchemaConfig
-from acquisition import AcquisitionConfig
-from temporal_protocol import TemporalProtocolConfig
-from pre_processor import PreprocConfig
-from qc import QCConfig
-from qc_freeze import QCFreezeConfig
-from scale_inference import ScaleInferenceConfig
-from cohort import CohortConfig
-from feature import FeatureConfig
-from analysis import AnalysisConfig
+from old_stuff.schema import SchemaConfig
+from old_stuff.acquisition import AcquisitionConfig
+from old_stuff.temporal_protocol import TemporalProtocolConfig
+from old_stuff.pre_processor import PreprocConfig
+from old_stuff.qc import QCConfig
+from old_stuff.qc_freeze import QCFreezeConfig
+from old_stuff.scale_inference import ScaleInferenceConfig
+from old_stuff.cohort import CohortConfig
+from old_stuff.feature import FeatureConfig
+from old_stuff.analysis import AnalysisConfig
 
 @dataclass(frozen=True)
 class RunConfig:

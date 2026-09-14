@@ -1,14 +1,14 @@
 from typing import Dict, Any
 from pathlib import Path
-from evidence_policy import EvidencePolicy
-from run_config import RunConfig
-from subject_recording import SubjectRecording
-from derive_temporal import derive_temporal_protocol
+from old_stuff.evidence_policy import EvidencePolicy
+from old_stuff.run_config import RunConfig
+from old_stuff.subject_recording import SubjectRecording
+from old_stuff.derive_temporal import derive_temporal_protocol
 from vars  import __version__, OPEN_LIMITATIONS, BLOCKED_ANALYSES, CHANGELOG_V24
 
 from dataclasses import asdict
-import qc as qc;
-import utils as ut
+import old_stuff.qc as qc;
+import old_stuff.utils as ut
 import pandas as pd
 import numpy as np
 import json
@@ -67,6 +67,7 @@ def run_main(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | P
         raise RuntimeError("Nenhum registro utilizavel.")
 
     # B3: referencia espectral EXTERNA, mediana da coorte nos blocos terminais
+
     cohort_ref = ut.cohort_terminal_profile(block_rows, cfg.temporal)
     settle_rows = []
     for prof in block_rows:
@@ -129,7 +130,6 @@ def run_main(eeg_dir: str | Path, metadata_path: str | Path, output_dir: str | P
     # B6: falhas segregadas por estagio; a v23 somava leitura e janela no mesmo total,
     # de modo que um sujeito podia ser contado ate 3 vezes como "arquivo que falhou".
     fail_df = pd.DataFrame(failures)
-    print(['fail_df',fail_df])
     if not fail_df.empty and "stage" in fail_df.columns:
         by_stage = fail_df.groupby("stage").size().to_dict()
         subj_by_stage = {k: int(v["subject_id"].nunique())

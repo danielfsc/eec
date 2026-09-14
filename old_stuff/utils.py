@@ -1,14 +1,14 @@
-from acquisition import AcquisitionConfig
-from temporal_protocol import TemporalProtocolConfig
-from pre_processor import PreprocConfig
-from cohort import CohortConfig
-from feature import FeatureConfig
-from qc import QCConfig
-from analysis import AnalysisConfig
-from schema import SchemaConfig
-from subject_recording import SubjectRecording
-from run_config import RunConfig
-from configuration import Configuration
+from old_stuff.acquisition import AcquisitionConfig
+from old_stuff.temporal_protocol import TemporalProtocolConfig
+from old_stuff.pre_processor import PreprocConfig
+from old_stuff.cohort import CohortConfig
+from old_stuff.feature import FeatureConfig
+from old_stuff.qc import QCConfig
+from old_stuff.analysis import AnalysisConfig
+from old_stuff.schema import SchemaConfig
+from old_stuff.subject_recording import SubjectRecording
+from old_stuff.run_config import RunConfig
+from old_stuff.configuration import Configuration
 
 from vars import TASK_UNSPECIFIED, NAME_REGEX, PROFILE_BANDS, PRIMARY_FEATURES, CLINICAL_SCALE_TOKENS
 

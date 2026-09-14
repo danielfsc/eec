@@ -13,7 +13,7 @@ class TemporalProtocolConfig:
     Procedimento (todas as etapas usam apenas sinais e tempos, nunca rotulos):
       1. perfil por blocos de ``block_seconds`` do registro filtrado;
       2. referencia de estado estavel = mediana dos blocos da metade final;
-      3. tempo de acomodacao do sujeito = primeiro instante a partir do qual TODOS
+      3. tempo de acomodação do sujeito = primeiro instante a partir do qual TODOS
          os blocos seguintes ficam dentro de ``settle_tol_log2`` em log2(RMS) e de
          ``settle_tol_js`` em divergencia espectral de Jensen-Shannon;
       4. acomodacao da coorte = quantil ``settle_quantile`` dos tempos individuais,

@@ -1,0 +1,506 @@
+{
+  "version": "24.0.0",
+  "changelog": [
+    "B1 teste de permutacao com estimador identico entre observado e nulo.",
+    "B2 fs volta a ser suposicao declarada e e verificada pelo pico de rede eletrica.",
+    "B3 referencia de acomodacao espectral externa (coorte) + flag de deriva global.",
+    "B4 skip_capped/window_capped expostos; protocolo invalidado quando o cap atua.",
+    "B5 distribuicao empirica de QC publicada; modo research exige limiares congelados.",
+    "B6 falhas segregadas por estagio nas contagens CONSORT.",
+    "B7 concordancia entre janelas com IC bootstrap e p binomial; veredito removido.",
+    "B8 mesmo numero de repeticoes de CV em todas as janelas.",
+    "B9 parser de sexo robusto a codificacao numerica, com relatorio.",
+    "B11 decision_threshold usado; coorte canonica de 55 IDs auditada; numpy direto."
+  ],
+  "environment": {
+    "python": "3.14.7",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scipy": "1.18.1",
+    "utc_created": "2026-09-14T16:59:42.057497+00:00",
+    "scikit_learn": "1.9.0"
+  },
+  "config": {
+    "acquisition": {
+      "fs": 250.0,
+      "fs_is_assumption": true,
+      "fs_verification_line_hz": [
+        50.0,
+        60.0
+      ],
+      "fs_verification_min_prominence_log10": 0.3,
+      "fs_verification_tol_hz": 0.5,
+      "fs_source": "Descritor MODMA: experimento pervasivo de 3 eletrodos, A/D de 24 bits a 250 Hz; lote unico verificado por esquema.",
+      "protocol_id": "MODMA_3ch_pervasive_resting",
+      "channel_names": [
+        "Fp1",
+        "Fpz",
+        "Fp2"
+      ],
+      "channel_order_source": "Ordem posicional das colunas do TXT (documentacao do dispositivo).",
+      "container_bits": 32,
+      "adc_bits": 24,
+      "lsb_to_uv": null
+    },
+    "schema": {
+      "expected_n_channels": 3,
+      "require_finite": true,
+      "require_integer": true,
+      "max_duration_s": 7200.0,
+      "allowed_tasks": [
+        "still",
+        "unspecified"
+      ],
+      "enforce_allowed_tasks": true
+    },
+    "temporal": {
+      "mode": "derived",
+      "block_seconds": 20.0,
+      "min_duration_seconds": 600.0,
+      "settle_tol_log2": 0.35,
+      "settle_tol_js": 0.15,
+      "settle_quantile": 0.8,
+      "min_skip_seconds": 30.0,
+      "max_skip_seconds": 420.0,
+      "target_window_seconds": 240.0,
+      "max_window_seconds": 480.0,
+      "n_sensitivity_windows": 3,
+      "require_sensitivity": true,
+      "max_within_window_drift_log2": 1.5,
+      "max_within_window_js": 0.35,
+      "settling_ref_mode": "cohort",
+      "n_terminal_blocks": 5,
+      "tail_trend_warn": 0.5,
+      "fixed_skip_seconds": 30.0,
+      "fixed_window_seconds": 240.0
+    },
+    "preproc": {
+      "notch_hz": 50.0,
+      "notch_q": 30.0,
+      "notch_mode": "auto",
+      "notch_line_ratio_threshold": 0.02,
+      "bandpass_hz": [
+        1.0,
+        40.0
+      ],
+      "filter_order": 4,
+      "edge_trim_seconds": 2.0,
+      "epoch_seconds": 4.0,
+      "epoch_overlap": 0.0
+    },
+    "qc": {
+      "p2p_ratio_max": 5.0,
+      "p2p_ratio_min": 0.2,
+      "jump_ratio_max": 8.0,
+      "lf_share_ratio_max": 2.5,
+      "max_rejected_fraction": 0.5,
+      "max_line_noise_ratio": 0.25,
+      "max_ocular_index": 0.8,
+      "max_muscle_ratio": 0.6,
+      "max_zero_diff_fraction": 0.2,
+      "max_saturation_fraction": 0.0001,
+      "max_nonstationarity_cv": 1.0,
+      "min_channel_corr": -0.5,
+      "cohort_mad_z_max": 4.0,
+      "cohort_outlier_metrics": [
+        "line_noise_ratio_post",
+        "ocular_index",
+        "muscle_ratio",
+        "nonstationarity_cv",
+        "log_rms_counts"
+      ],
+      "wrap_fraction_warn": 0.6
+    },
+    "qc_freeze": {
+      "thresholds_frozen": false,
+      "freeze_date": null,
+      "freeze_source": "",
+      "require_freeze_for_research": true
+    },
+    "scale": {
+      "enabled": true,
+      "anchor_rms_uv": 15.0,
+      "anchor_source": "Valor central declarado a priori para RMS 1-40 Hz frontal de repouso.",
+      "average_reference_tol": 1e-06,
+      "common_mode_high": 0.5,
+      "gcd_max_samples": 200000
+    },
+    "cohort": {
+      "expected_n": 55,
+      "expected_subject_ids": [
+        "02010001",
+        "02010002",
+        "02010003",
+        "02010005",
+        "02010006",
+        "02010007",
+        "02010008",
+        "02010009",
+        "02010010",
+        "02010011",
+        "02010012",
+        "02010013",
+        "02010014",
+        "02010015",
+        "02010016",
+        "02010018",
+        "02010019",
+        "02010020",
+        "02010021",
+        "02010022",
+        "02010024",
+        "02010025",
+        "02010026",
+        "02010030",
+        "02010035",
+        "02010038",
+        "02020004",
+        "02020007",
+        "02020008",
+        "02020010",
+        "02020011",
+        "02020014",
+        "02020015",
+        "02020016",
+        "02020018",
+        "02020019",
+        "02020021",
+        "02020022",
+        "02020023",
+        "02020025",
+        "02020026",
+        "02020027",
+        "02030001",
+        "02030002",
+        "02030003",
+        "02030004",
+        "02030005",
+        "02030006",
+        "02030007",
+        "02030008",
+        "02030009",
+        "02030010",
+        "02030016",
+        "02030020",
+        "02030021"
+      ],
+      "duplicate_policy": "prefer_task",
+      "preferred_task": "still",
+      "require_one_file_per_subject": true
+    },
+    "features": {
+      "welch_nperseg_seconds": 2.0,
+      "welch_overlap": 0.5,
+      "bands": [
+        [
+          "delta",
+          1.0,
+          4.0
+        ],
+        [
+          "theta",
+          4.0,
+          8.0
+        ],
+        [
+          "alpha",
+          8.0,
+          13.0
+        ],
+        [
+          "beta",
+          13.0,
+          30.0
+        ]
+      ],
+      "total_band": [
+        1.0,
+        40.0
+      ],
+      "alpha_peak_band": [
+        7.0,
+        13.0
+      ],
+      "alpha_min_peak_log10": 0.05,
+      "aperiodic_fit_band": [
+        3.0,
+        35.0
+      ],
+      "aperiodic_peak_sd": 1.5,
+      "aperiodic_max_iter": 5,
+      "ocular_band": [
+        0.5,
+        3.0
+      ],
+      "muscle_band": [
+        20.0,
+        40.0
+      ],
+      "perm_entropy_order": 3,
+      "perm_entropy_delay": 1,
+      "higuchi_kmax": 10,
+      "aggregate": "median",
+      "min_good_epochs": 30
+    },
+    "analysis": {
+      "covariates": [
+        "age",
+        "sex",
+        "education_years"
+      ],
+      "fdr_alpha": 0.05,
+      "n_boot_effect": 2000,
+      "outer_folds": 5,
+      "outer_repeats": 20,
+      "inner_folds": 5,
+      "logistic_c_grid": [
+        0.01,
+        0.1,
+        1.0,
+        10.0
+      ],
+      "inner_scoring": "roc_auc",
+      "n_boot_metrics": 2000,
+      "n_permutations": 200,
+      "permutation_outer_repeats": 1,
+      "batch_collinearity_warn": 0.6,
+      "decision_threshold": 0.5,
+      "permutation_matched_repeats": 5,
+      "sensitivity_outer_repeats": null,
+      "sign_agreement_n_boot": 2000,
+      "random_seed": 20240517
+    },
+    "random_seed": 20240517
+  },
+  "policy": {
+    "mode": "integration",
+    "min_subjects_for_ml": 20,
+    "min_per_class_for_ml": 20,
+    "require_both_classes": true,
+    "forbid_clinical_scales": true
+  },
+  "selection_criterion": "A_definir",
+  "input_files": [
+    {
+      "name": "02010001_still.txt",
+      "sha256": "5187f601ee60bfde3adb1d69670c73bff0fe26ea00ef33a5a565ed28c92afa88"
+    },
+    {
+      "name": "02010002_still.txt",
+      "sha256": "df012ea9eab408046a6f51a8043704fd37e26deade55ee778d686a7d163cfcab"
+    },
+    {
+      "name": "02010003_still.txt",
+      "sha256": "37eeeb5074ebc7c00c8eb673926c2b71943335a70e8d48884e8b8c943b7d585c"
+    },
+    {
+      "name": "02010005_still.txt",
+      "sha256": "53d348c2f5826da34d9fb1de14603c543ef134a6205d674fe8cd1854194463a2"
+    },
+    {
+      "name": "02010006_still.txt",
+      "sha256": "0b64a46707e64b6188c1985d75421ed634b0f6f4147b1a7dbe02ba71fa59f183"
+    },
+    {
+      "name": "02010007_still.txt",
+      "sha256": "a01b9e3427f0bf976e3e6350d1923a81cfc34cd91a362272f412b4c37a718f69"
+    },
+    {
+      "name": "02010008_still.txt",
+      "sha256": "dbc9fd240d71bf1efbbec1c417715ab47aa8cac838e1dc700efe45948d5c7917"
+    },
+    {
+      "name": "02010009_still.txt",
+      "sha256": "0268ea8622c398fab74e36bfbe292fd93ce7b992d15a9bf9d48a00a0d732529e"
+    },
+    {
+      "name": "02010010_still.txt",
+      "sha256": "532986eddaa4aafe41c44eb1921c235a84dcb309300e1626d085a8592b07a78d"
+    },
+    {
+      "name": "02010011_still.txt",
+      "sha256": "b5d964c2fccfadb0a5a45cdff9eccde300cd26bd699466b5fd22c4f21fa8c625"
+    },
+    {
+      "name": "02010012_still.txt",
+      "sha256": "260da9b6bb8c619e64d853ad5a5d6b424b53c46158b2d1bcae995091edc2b1bf"
+    },
+    {
+      "name": "02010013_still.txt",
+      "sha256": "aea1e1cf2cf856c86986771a3d2eba036d105ddf0b18c22ea2d29b9f88fd7d23"
+    },
+    {
+      "name": "02010014_still.txt",
+      "sha256": "37aa86eee59a0ff7c3cfcbd2709c7ec6413625afbeb816b7d8d9968e47ff272b"
+    },
+    {
+      "name": "02010015_still.txt",
+      "sha256": "640e7ae45b2c4e2117b39ea391225ddc31960fd8e22f8a90309a3394ed0f34a1"
+    },
+    {
+      "name": "02010016_still.txt",
+      "sha256": "42fa01caca6c2dc26b4b1285a50d635a4e12ffb37d332f380fe0a8192f236d61"
+    },
+    {
+      "name": "02010018_still.txt",
+      "sha256": "1cde618003823d1030cfe2f9021cb9cbd8f394c6f5fd9a578d03e72cd1e59d0a"
+    },
+    {
+      "name": "02010019_still.txt",
+      "sha256": "25208b4723e5a5d86ffc01ac3e8f5faeb7a15b808809e2ceff3b6ad0fcf7cb49"
+    },
+    {
+      "name": "02010020_still.txt",
+      "sha256": "f103ba373f1292919173114098015a112407783f03cdb1b0569036ee1838190a"
+    },
+    {
+      "name": "02010021_still.txt",
+      "sha256": "6b733e97004ffa8e60f80b5210970f47daa50c547b734a85d09c97a6754a7a78"
+    },
+    {
+      "name": "02010022_still.txt",
+      "sha256": "9b4d3148a564de3d063e77cfa0b65545c2615b09a541840e5b6222326b146aba"
+    },
+    {
+      "name": "02010024_still.txt",
+      "sha256": "f6c2892f87b5312bd4a6653e7bb09032acf73dafc274cd09dbe1e343df33412c"
+    },
+    {
+      "name": "02010025_still.txt",
+      "sha256": "4c98add0085e0aaa8190f9851c0c5b6f15590f09390c0a3eb666fc805fd3f02e"
+    },
+    {
+      "name": "02010026_still.txt",
+      "sha256": "b01ec99c8396bf603ece441f6237caeeb3d83ce226e4c3badcaca039414534d5"
+    },
+    {
+      "name": "02010030_still.txt",
+      "sha256": "dbe789d64d60995dfdf7519087fe85e9f37fd5fccf3179c0945e221db1c0b8bc"
+    },
+    {
+      "name": "02010035_still.txt",
+      "sha256": "d2bc86ec66536f4f5cc74bf5dae2f9c5599f0f0f30873be6ec8de5ee4cea5b79"
+    },
+    {
+      "name": "02010038_still.txt",
+      "sha256": "8608e4e7641303b87d0c6a4787bcee038568d9955ddf664673198e8945be92ed"
+    },
+    {
+      "name": "02020004_still.txt",
+      "sha256": "ec63301144653fc45f2fac0b89d31db63759dfbc5fedc027f6d823cd9547cfdf"
+    },
+    {
+      "name": "02020007_still.txt",
+      "sha256": "98196bce0f0fc283c68c46821da0ef9fd5dbcacdcb024aa178f1e66c675d8d74"
+    },
+    {
+      "name": "02020008_still.txt",
+      "sha256": "c751554bc905b570b33d1bc6588105babcee019920a24968c7f1b4ad0744bcf6"
+    },
+    {
+      "name": "02020010_still.txt",
+      "sha256": "3bd9580ae03dc19005eedf5daa9d62a056ff30952be1e06c34b634f052afa197"
+    },
+    {
+      "name": "02020011_still.txt",
+      "sha256": "15477b67e91c62573f17a379549cb9aff64c29423ab9f3a0919fc89444585f20"
+    },
+    {
+      "name": "02020014_still.txt",
+      "sha256": "9a051517a7becc59955d9c5184b8b925cf1ca43e46ac18ccd6986d740391dc8d"
+    },
+    {
+      "name": "02020015_still.txt",
+      "sha256": "3dd4eefb2cee119a67466b733eedab8027d16f11c8a99462273cb3f4ffb5e83f"
+    },
+    {
+      "name": "02020016_still.txt",
+      "sha256": "fede29c78c5e7ca9ddc8644bca4aff416d8256e6b46d46f34f75dc74bc2b3473"
+    },
+    {
+      "name": "02020018_still.txt",
+      "sha256": "873e58ae2a330b1c379fb9cc0d147f4792599d3854f4d77daed24cead55a254b"
+    },
+    {
+      "name": "02020019_still.txt",
+      "sha256": "b19e70a2b398fe82ddcdf16f95eebd302a8e28ab49ab4b8e1eeccabc612ca8cd"
+    },
+    {
+      "name": "02020021_still.txt",
+      "sha256": "7ad14032c7d7107645b4647af492cdacdf2f8c9a83b9d267318c354f30a576fd"
+    },
+    {
+      "name": "02020022_still.txt",
+      "sha256": "d25f23e17d63a38225a08c5d64e1090c40a2de4406a3e9977b38a4ebc2ecf044"
+    },
+    {
+      "name": "02020023_still.txt",
+      "sha256": "a0f7a02e170280eb4ae77e99f8acb5dfec165a39121dff3d60e890b67051dc5a"
+    },
+    {
+      "name": "02020025_still.txt",
+      "sha256": "739e2af053d36dbffb4c178caa356e5b1a6ed53e78068d7cfee799bedfa85eb1"
+    },
+    {
+      "name": "02020026_still.txt",
+      "sha256": "bd8485257dbeba93586c619932a8750d910036d4a43985269242ac2f58a3c1b0"
+    },
+    {
+      "name": "02020027_still.txt",
+      "sha256": "83a2e631eb231dce0f06add7d728acf1770cfcf26d17619f277e8c31ecf675c9"
+    },
+    {
+      "name": "02030001_still.txt",
+      "sha256": "9c16d8cf858b6166943a1493ac9a214962481818aa6830db5bf18f40fb248293"
+    },
+    {
+      "name": "02030002_still.txt",
+      "sha256": "526000b118fb9e01e9cb569e9c41c88ae061dd5a57bfcf70eadb82d99bbb0f9a"
+    },
+    {
+      "name": "02030003_still.txt",
+      "sha256": "8dc8d16f1aa197cfa5c45aea4c29805b53646609fdc522b61275689373592a5e"
+    },
+    {
+      "name": "02030004_still.txt",
+      "sha256": "0188353dc910c34934d4a5be0a9f86aa62127c36824ed56fa516ee02663c9bd1"
+    },
+    {
+      "name": "02030005_still.txt",
+      "sha256": "66cbb90e9075b0c618bdf8f46e233dc866bb5e1fbead481a32187d50600fe36d"
+    },
+    {
+      "name": "02030006_still.txt",
+      "sha256": "106ebe4e50771cff1f0ae746f2f2143dca7d1899a182cddbc820da2d2555de14"
+    },
+    {
+      "name": "02030007_still.txt",
+      "sha256": "7332f9eb7c7a6dcae2b787049af253d1a615667984a6762fb6f336eeadd216a0"
+    },
+    {
+      "name": "02030008_still.txt",
+      "sha256": "7cbe25c433c0b9423c5294990542984bb64b3a7d67f8be2016c41cca5837927c"
+    },
+    {
+      "name": "02030009_still.txt",
+      "sha256": "a2c6ed39386209bf4bae4c1a7687c014950b34e2feb634636d78fa27962b35bb"
+    },
+    {
+      "name": "02030010_still.txt",
+      "sha256": "81259ffd209f320da38ea277e66109a3fe174736bce4c8e03a116497254d9ce0"
+    },
+    {
+      "name": "02030016_still.txt",
+      "sha256": "b2d3f340291baeb5b65244163c74817e70444282f62973f8994e17d35cd9ed2f"
+    },
+    {
+      "name": "02030020_still.txt",
+      "sha256": "8852b45762266a2e9d9dbefce58db8072b0599a8a9acbaffb008f05f95b78608"
+    },
+    {
+      "name": "02030021_still.txt",
+      "sha256": "6a39c6b941686651102e55bfafcdc36f154d6de02a3c899035f3feecd4da650e"
+    }
+  ]
+}

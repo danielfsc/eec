@@ -24,8 +24,8 @@ class QCConfig:
 import pandas as pd
 import numpy as np
 from vars import QC_THRESHOLD_MAP
-from qc_freeze import QCFreezeConfig
-from evidence_policy import EvidencePolicy
+from old_stuff.qc_freeze import QCFreezeConfig
+from old_stuff.evidence_policy import EvidencePolicy
 
 def assert_qc_thresholds_frozen(freeze: QCFreezeConfig, policy: EvidencePolicy) -> None:
     """B5: trava dura - modo research exige limiares de QC congelados e datados."""

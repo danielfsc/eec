@@ -1,0 +1,66 @@
+<mxfile host="65bd71144e">
+    <diagram id="qHNLypAel2g-tT-2tOrq" name="Página-1">
+        <mxGraphModel dx="1563" dy="1166" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="29" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="180" y="10" width="1163.75" height="930" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="group" parent="29" vertex="1" connectable="0">
+                    <mxGeometry x="680" y="340" width="483.75" height="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="shape=ext;double=1;whiteSpace=wrap;html=1;aspect=fixed;rounded=0;glass=1;shadow=1;" parent="4" vertex="1">
+                    <mxGeometry x="-47.5" width="510" height="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="&lt;div&gt;Lendo Um Arquivo&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="4" vertex="1">
+                    <mxGeometry x="37.5" y="20" width="340" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="1) Carrega o arquivo com Pandas&lt;div&gt;&lt;div style=&quot;color: rgb(175, 175, 175); background-color: rgb(30, 30, 30); font-family: &amp;quot;Fira Code&amp;quot;, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-size: 8px;&quot;&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;data_raw = pd.read_csv(&lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;file&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;sep&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(170, 122, 102);&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;names&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=cfg.electrode_labels)&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="4" vertex="1">
+                    <mxGeometry x="37.5" y="70" width="342.5" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="2) Converte para Numpy Array&lt;span style=&quot;font-family: monospace; font-size: 0px; text-align: start; white-space: nowrap;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%221)%20Carrega%20o%20arquivo%20com%20Pandas%22%20style%3D%22rounded%3D0%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%2277.5%22%20y%3D%2290%22%20width%3D%22342.5%22%20height%3D%2230%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;&lt;div&gt;&lt;div style=&quot;text-align: left; color: rgb(175, 175, 175); background-color: rgb(30, 30, 30); font-family: &amp;quot;Fira Code&amp;quot;, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-size: 6px;&quot;&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;data_raw = np.transpose(data_raw.to_numpy().astype(&lt;/span&gt;&lt;span style=&quot;color: rgb(68, 166, 146);&quot;&gt;float&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;))&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="4" vertex="1">
+                    <mxGeometry x="37.5" y="130" width="342.5" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;3) Corrige os valores inteiros para 24 bits&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;div style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: rgb(30, 30, 30); font-family: &amp;quot;Fira Code&amp;quot;, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;div style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); text-align: left;&quot;&gt;&lt;font style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); line-height: 7.2px;&quot;&gt;&lt;span style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: rgb(30, 30, 30);&quot;&gt;&lt;font style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-size: 6px; line-height: 3.6px; color: rgb(255, 255, 255);&quot;&gt;data_np, changed_values_on_wraparound = ft.fix_integer_wraparound(data_raw)&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); font-size: 6px; line-height: 3.6px; background-color: light-dark(rgb(30, 30, 30), rgb(211, 211, 211));&quot;&gt;&lt;font style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); color: rgb(255, 255, 255);&quot;&gt;data_np = np.ascontiguousarray(data_np)&lt;/font&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="4" vertex="1">
+                    <mxGeometry x="37.5" y="190" width="342.5" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;4) Aplicando os filtros&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;div style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: rgb(30, 30, 30); font-family: &amp;quot;Fira Code&amp;quot;, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;div style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); text-align: left;&quot;&gt;&lt;div style=&quot;line-height: 21px;&quot;&gt;&lt;span&gt;&lt;font style=&quot;font-size: 9px; color: rgb(255, 255, 255);&quot;&gt;data_np, filter_info = ft.apply_filter(data_np, cfg)&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="4" vertex="1">
+                    <mxGeometry x="37.5" y="270" width="342.5" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;5) Calculando o perfil espectral por blocos&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;div style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: rgb(30, 30, 30); font-family: &amp;quot;Fira Code&amp;quot;, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;div style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); text-align: left;&quot;&gt;&lt;div style=&quot;line-height: 21px;&quot;&gt;&lt;div style=&quot;line-height: 21px;&quot;&gt;&lt;font style=&quot;font-size: 6px; color: rgb(255, 255, 255);&quot;&gt;profile = ut.spectral_profile_blocked(data_np, cfg.sampling_frequency, cfg.block_time)&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="4" vertex="1">
+                    <mxGeometry x="36.25" y="330" width="342.5" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;6) Calculando as métricas de controle de qualidade&lt;/span&gt;&lt;br style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&lt;div style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); background-color: rgb(30, 30, 30); font-family: &amp;quot;Fira Code&amp;quot;, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 21px; white-space: pre;&quot;&gt;&lt;div style=&quot;scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251); text-align: left;&quot;&gt;&lt;div style=&quot;line-height: 21px;&quot;&gt;&lt;div style=&quot;line-height: 21px;&quot;&gt;&lt;div style=&quot;color: rgb(175, 175, 175); line-height: 21px;&quot;&gt;&lt;font style=&quot;font-size: 6px;&quot;&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;metrics = ut.quality_control_metrics(data_raw, data_np, &lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;filtering_info&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=filter_info, &lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(175, 175, 175); line-height: 21px;&quot;&gt;&lt;font style=&quot;font-size: 6px;&quot;&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;subject_id&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=subject_id, &lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;file_name&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;file&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;.name, &lt;/span&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;eeg_task&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=subject_state, &lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(175, 175, 175); line-height: 21px;&quot;&gt;&lt;font style=&quot;font-size: 6px;&quot;&gt;&lt;span style=&quot;color: rgb(130, 182, 209);&quot;&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;n_wraparound&lt;/span&gt;&lt;span style=&quot;color: rgb(175, 175, 175);&quot;&gt;=changed_values_on_wraparound)&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="4" vertex="1">
+                    <mxGeometry x="36.25" y="390" width="342.5" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="" style="group" parent="29" vertex="1" connectable="0">
+                    <mxGeometry width="500" height="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="25" vertex="1">
+                    <mxGeometry width="500" height="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="Sequência de Trabalho" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="25" vertex="1">
+                    <mxGeometry x="80" y="30" width="340" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="&lt;ol&gt;&lt;li&gt;Carrega as configurações: configurations_new&lt;/li&gt;&lt;li&gt;Cria diretórios de saída&lt;/li&gt;&lt;li&gt;Carrega metadados em xlsx&lt;/li&gt;&lt;li&gt;Carrega os arquivos de EEG&lt;/li&gt;&lt;/ol&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="25" vertex="1">
+                    <mxGeometry x="80" y="110" width="340" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" style="edgeStyle=none;html=1;strokeWidth=5;fillColor=#d5e8d4;strokeColor=#82b366;" parent="25" source="23" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="900" y="330" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="900" y="260"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="23" value="Para cada arquivo roda a rotina de ler um arquivo -&amp;gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="25" vertex="1">
+                    <mxGeometry x="80" y="230" width="340" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="29">
+                    <mxGeometry x="30" y="640" width="470" height="290" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

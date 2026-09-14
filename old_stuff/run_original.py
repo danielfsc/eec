@@ -1,14 +1,14 @@
 from typing import Dict, Any
 from pathlib import Path
-from evidence_policy import EvidencePolicy
-from run_config import RunConfig
-from subject_recording import SubjectRecording
-from derive_temporal import derive_temporal_protocol
+from old_stuff.evidence_policy import EvidencePolicy
+from old_stuff.run_config import RunConfig
+from old_stuff.subject_recording import SubjectRecording
+from old_stuff.derive_temporal import derive_temporal_protocol
 from vars  import __version__, OPEN_LIMITATIONS, BLOCKED_ANALYSES, CHANGELOG_V24
 
 from dataclasses import asdict
-import qc as qc;
-import utils as ut
+import old_stuff.qc as qc;
+import old_stuff.utils as ut
 import pandas as pd
 import numpy as np
 import json

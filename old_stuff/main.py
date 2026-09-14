@@ -13,11 +13,11 @@ import os
 #     sys.path.append(classes_path)
 
 # 3. Import your function directly from the file name
-from run_config import RunConfig
-from temporal_protocol import TemporalProtocolConfig
-from evidence_policy import EvidencePolicy
-from selftest import selftest_v24
-from run import run_main
+from old_stuff.run_config import RunConfig
+from old_stuff.temporal_protocol import TemporalProtocolConfig
+from old_stuff.evidence_policy import EvidencePolicy
+from old_stuff.selftest import selftest_v24
+from old_stuff.run import run_main
 
 def main_v24() -> None:
     """CLI: python depressao_eeg_v24.py --eeg-dir DIR --metadata FILE --output DIR

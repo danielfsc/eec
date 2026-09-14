@@ -1,0 +1,3 @@
+file,subject_id,stage,error
+02010005_still.txt,02010005,features_w937,ValueError: Sinal insuficiente: 293409 < 294250 amostras.
+02030001_still.txt,02030001,features_w937,ValueError: Sinal insuficiente: 293649 < 294250 amostras.
