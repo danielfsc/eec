@@ -1,18 +1,18 @@
 import sys
 from pathlib import Path
 # from utils import parse_modma_filename, fix_integer_wraparound, jensen_shannon, cramers_v
-import old_stuff.utils as ut
+import utils as ut
 from vars import TASK_UNSPECIFIED, EXPECTED_SUBJECT_IDS_55
 import numpy as np
 import pandas as pd
-from old_stuff.derive_temporal import derive_temporal_protocol
-from old_stuff.temporal_protocol import TemporalProtocolConfig
-from old_stuff.evidence_policy import EvidencePolicy
-from old_stuff.analysis import AnalysisConfig
-from old_stuff.cohort import CohortConfig
-from old_stuff.qc import qc_distribution_report, assert_qc_thresholds_frozen
-from old_stuff.qc_freeze import QCFreezeConfig
-from old_stuff.run import run_main
+from derive_temporal import derive_temporal_protocol
+from temporal_protocol import TemporalProtocolConfig
+from evidence_policy import EvidencePolicy
+from analysis import AnalysisConfig
+from cohort import CohortConfig
+from qc import qc_distribution_report, assert_qc_thresholds_frozen
+from qc_freeze import QCFreezeConfig
+from run import run_main
 import warnings
 # Add the parent directory to the module search path
 # sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -20,7 +20,7 @@ import warnings
 # Now import your module normally
 
 
-from old_stuff.run_config import RunConfig
+from run_config import RunConfig
 from typing import  Dict
 
 

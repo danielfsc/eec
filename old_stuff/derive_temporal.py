@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import warnings
 from typing import Dict, Any
-from old_stuff.temporal_protocol import TemporalProtocolConfig
+from temporal_protocol import TemporalProtocolConfig
 
 
 

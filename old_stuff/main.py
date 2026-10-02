@@ -1,4 +1,5 @@
 import argparse
+import json
 
 import sys
 import os
@@ -13,11 +14,27 @@ import os
 #     sys.path.append(classes_path)
 
 # 3. Import your function directly from the file name
-from old_stuff.run_config import RunConfig
-from old_stuff.temporal_protocol import TemporalProtocolConfig
-from old_stuff.evidence_policy import EvidencePolicy
-from old_stuff.selftest import selftest_v24
-from old_stuff.run import run_main
+from run_config import RunConfig
+from temporal_protocol import TemporalProtocolConfig
+from evidence_policy import EvidencePolicy
+from selftest import selftest_v24
+from run import run_main
+import numpy as np
+from pathlib import Path
+from typing import Any
+
+
+def _json_default(value: Any) -> Any:
+    if isinstance(value, (np.integer, np.floating)):
+        return value.item()
+    if isinstance(value, (np.bool_,)):
+        return bool(value)
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, Path):
+        return str(value)
+    return str(value)
+
 
 def main_v24() -> None:
     """CLI: python depressao_eeg_v24.py --eeg-dir DIR --metadata FILE --output DIR
