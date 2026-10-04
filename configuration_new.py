@@ -7,7 +7,7 @@ from vars import EXPECTED_SUBJECT_IDS_55
 @dataclass(frozen=True)
 class Configuration:
 
-    policy_mode: str = "integration"                 # derived | fixed
+    policy_mode: str = "research"                
     ## Acquisition Parameters
     
     bits_resolution = 24
@@ -159,12 +159,12 @@ class Configuration:
     #     "line_noise_ratio_post", "ocular_index", "muscle_ratio",
     #     "nonstationarity_cv", "log_rms_counts")
 
-    cohort_outlier_metrics=(
+    cohort_outlier_metrics = (
         "line_noise_ratio_post",
         "ocular_index",
         "muscle_ratio",
-        "log_rms_counts",
-    ),
+        "log_rms_counts"
+    )
     wrap_fraction_warn: float = 0.60#
     min_good_epochs: int = 30
 

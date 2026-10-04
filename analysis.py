@@ -302,7 +302,9 @@ def qc_distribution_report(qc_df: pd.DataFrame, qc: Configuration) -> pd.DataFra
                      "max": float(fin.max()) if fin.size else np.nan,
                      "n_excluded_by_threshold": n_ex,
                      "frac_excluded_by_threshold": float(n_ex / fin.size) if fin.size else np.nan})
+    # print(qc.cohort_outlier_metrics)
     for m in qc.cohort_outlier_metrics:
+        # print(f"Processing cohort outlier metric: {m}")
         col = "z__" + m
         if col not in qc_df.columns:
             continue

@@ -503,6 +503,33 @@ def load_modma_txt(path: str | Path, cfg: Configuration, source_name: str) -> Su
            "task_parsed": task}
     return SubjectRecording(sid, task, x, cfg.sampling_frequency, source_name, rep)
 
+def load_modma_to_save(path: str | Path, cfg: Configuration, source_name: str) -> SubjectRecording:
+    """Le um TXT MODMA de 3 canais e valida o esquema antes de devolver o registro."""
+    
+    sid, task = parse_modma_filename(source_name)
+    arr = np.loadtxt(str(path), dtype=np.float64)
+    if arr.ndim != 2 or arr.shape[1] != cfg.expected_n_channels:
+        raise ValueError("%s: esperado (N,%d), obtido %s."
+                         % (source_name, cfg.expected_n_channels, arr.shape))
+    if cfg.require_finite and not np.isfinite(arr).all():
+        raise ValueError("%s: valores nao finitos." % source_name)
+    if cfg.require_integer and not np.allclose(arr, np.round(arr)):
+        raise ValueError("%s: valores nao inteiros." % source_name)
+    if cfg.enforce_allowed_tasks and task not in cfg.allowed_tasks:
+        raise ValueError("%s: tarefa '%s' fora do protocolo." % (source_name, task))
+    arr, n_wrap = ft.fix_integer_wraparound(arr, cfg.container_bits)
+    x = np.ascontiguousarray(arr.T)
+    dur = x.shape[1] / cfg.sampling_frequency
+    if dur > cfg.max_data_duration:
+        raise ValueError("%s: duracao %.1f s acima do maximo." % (source_name, dur))
+    rep = {"n_samples": int(x.shape[1]), "duration_s": float(dur),
+           "n_wraparound_fixed": int(n_wrap),
+           "subject_id": sid,
+           "wraparound_fraction": float(n_wrap / x.size),
+           "dc_offset_counts": [float(v) for v in x.mean(axis=1)],
+           "task_parsed": task}
+    return [rep, x]
+
 def mask(f: np.ndarray, lo: float, hi: float) -> np.ndarray:
     return (f >= lo) & (f < hi)
 
